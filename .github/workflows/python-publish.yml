@@ -23,7 +23,7 @@ jobs:
           pip install build
 
       - name: Write version
-        run: echo "${GITHUB_REF#refs/*/}">VERSION
+        run: echo "${GITHUB_REF#refs/*/}">adtools/VERSION
 
       - name: Build package
         run: python -m build
