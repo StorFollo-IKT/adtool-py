@@ -45,6 +45,9 @@ jobs:
       - name: Start docker container
         run: docker run -d -p 389:389 ad_emulator
 
+      - name: Install test utils
+        run: pip install slapd
+
       - name: Load test data
         run: python tests/load_data.py
 
