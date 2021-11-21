@@ -11,6 +11,7 @@ class Group(ADObject):
 
     def add_member(self, user: User):
         user.groups.append(self.dn)
+        self.members.append(user.dn)
         self.adtools.add_group_member(self.dn, user.dn)
 
     def remove_member(self, user: User):
