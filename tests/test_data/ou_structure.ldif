@@ -3,6 +3,12 @@ objectClass: dcObject
 objectClass: organizationalUnit
 ou: Test
 
+dn: OU=Test,DC=example,DC=com
+changetype: add
+objectClass: top
+objectClass: organizationalUnit
+ou: Test
+
 dn: OU=adtools-test,OU=Test,DC=example,DC=com
 changetype: add
 dSCorePropagationData: 16010101000000.0Z
