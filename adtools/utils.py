@@ -2,7 +2,7 @@ import re
 
 
 def ou(dn):
-    return re.sub(r'CN=.+?,(OU=.+)', r'\1', dn)
+    return re.sub(r'CN=.+?,(OU=.+)', r'\1', dn, flags=re.IGNORECASE)
 
 
 def uppercase_dn(dn):
