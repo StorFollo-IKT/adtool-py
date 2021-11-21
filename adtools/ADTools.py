@@ -13,6 +13,10 @@ def check_result(result):
 class ADTools:
     conn = None
 
+    def __del__(self):
+        if self.conn:
+            self.conn.unbind()
+
     def _find_object_class(self, response):
         if 'objectClass' not in response['attributes']:
             raise ValueError('objectClass attribute not found, unable to detect class')
