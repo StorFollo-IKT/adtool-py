@@ -42,11 +42,14 @@ jobs:
           # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Start docker container
-        run: docker run -d -p 389:389 ad_emulator
-
       - name: Install LDAP utils
         run: sudo apt-get install -y ldap-utils slapd
+
+      - name: Stop local slapd
+        run: sudo /etc/init.d/slapd stop
+
+      - name: Start docker container
+        run: docker run -d -p 389:389 ad_emulator
 
       - name: Install test utils
         run: pip install slapd
