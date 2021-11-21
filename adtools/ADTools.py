@@ -18,8 +18,12 @@ class ADTools:
             server, username, password,
             client_strategy=SAFE_SYNC, auto_bind=True, raise_exceptions=True)
 
-    def get_object(self, dn, attributes=None):
+    def get_object(self, dn: str, attributes: list = None):
         base = utils.ou(dn)
+        if attributes is None:
+            attributes = []
+        attributes.append('objectClass')
+
         dn = ldap_utils.conv.escape_filter_chars(dn)
         status, result, response, _ = self.conn.search(base,
                                                        '(distinguishedName=%s)' % dn, attributes=attributes)
