@@ -12,6 +12,8 @@ process = slapd.Slapd(
     debug=True,
 )
 
+process.default_ldap_uri = 'ldap://localhost:389/'
+
 
 def failsafe_add(file):
     with open(file) as fp:
