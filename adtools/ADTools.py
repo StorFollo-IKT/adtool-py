@@ -14,7 +14,9 @@ class ADTools:
 
     def connect(self, dc, username, password, ldaps=False, port=None):
         server = Server(dc, port=port, use_ssl=ldaps)
-        self.conn = Connection(server, username, password, client_strategy=SAFE_SYNC, auto_bind=True)
+        self.conn = Connection(
+            server, username, password,
+            client_strategy=SAFE_SYNC, auto_bind=True, raise_exceptions=True)
 
     def get_object(self, dn, attributes=None):
         base = utils.ou(dn)
