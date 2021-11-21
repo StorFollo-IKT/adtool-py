@@ -9,7 +9,7 @@ process = slapd.Slapd(
     root_cn='admin',
     root_pw='test',
     port=389,
-    log_level=logging.INFO,
+    log_level=logging.DEBUG,
     suffix='DC=example,DC=com',
     # debug=True,
 )
