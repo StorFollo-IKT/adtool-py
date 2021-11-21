@@ -46,7 +46,7 @@ jobs:
         run: docker run -d -p 389:389 ad_emulator
 
       - name: Install LDAP utils
-        run: sudo apt-get install -y ldap-utils
+        run: sudo apt-get install -y ldap-utils slapd
 
       - name: Install test utils
         run: pip install slapd
