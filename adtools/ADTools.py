@@ -1,3 +1,5 @@
+import re
+
 import ldap3
 
 from . import exceptions, objects, utils
@@ -65,7 +67,20 @@ class ADTools:
         return elements
 
     def get_user(self, dn, attributes=None):
-        return self.get_object(dn, 'user', attributes)
+        if attributes is None:
+            attributes = []
+        if 'memberOf' not in attributes:
+            attributes.append('memberOf')
+
+        matches = re.match(r'CN=(.+?),(OU=.+)', dn, flags=re.IGNORECASE)
+        cn = matches.group(1)
+        ou = matches.group(2)
+
+        response = self.search(ou, '(cn=%s)' % cn, attributes, ldap3.LEVEL)
+        if not response:
+            return None
+
+        return response[0]
 
     def get_group(self, dn, attributes=None):
         if attributes is None:
