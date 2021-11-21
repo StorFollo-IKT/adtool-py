@@ -5,6 +5,10 @@ def ou(dn):
     return re.sub(r'CN=.+?,(OU=.+)', r'\1', dn)
 
 
+def uppercase_dn(dn):
+    return re.sub(r'([a-z]{2}=)', lambda m: m.group(1).upper(), dn)
+
+
 def get_flags(value):
     flag_list = {
         1: 'SCRIPT',
