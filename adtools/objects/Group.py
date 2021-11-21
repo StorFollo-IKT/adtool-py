@@ -1,5 +1,5 @@
 from adtools import utils
-from objects import ADObject, User
+from . import ADObject, User
 
 
 class Group(ADObject):

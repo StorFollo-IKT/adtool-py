@@ -1,7 +1,7 @@
 from ldap3.core.exceptions import LDAPAttributeOrValueExistsResult, LDAPNoSuchAttributeResult
 
 from adtools import utils
-from objects import ADObject
+from . import ADObject
 
 
 class User(ADObject):

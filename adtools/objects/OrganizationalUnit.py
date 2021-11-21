@@ -1,8 +1,8 @@
 from ldap3 import LEVEL
 
-import objects
+from . import ADObject
 
 
-class OrganizationalUnit(objects.ADObject):
+class OrganizationalUnit(ADObject):
     def children(self):
         return self.adtools.search(self.dn, '(objectClass=organizationalUnit)', search_scope=LEVEL)

@@ -1,5 +1,5 @@
-import objects
+from . import ADObject
 
 
-class Computer(objects.ADObject):
+class Computer(ADObject):
     pass
