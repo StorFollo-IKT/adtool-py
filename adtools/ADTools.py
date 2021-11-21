@@ -35,3 +35,13 @@ class ADTools:
                                                        '(distinguishedName=%s)' % group_dn, attributes=['member'])
 
         return response[0]['attributes']['member']
+
+    def remove_group_member(self, group_dn, member_dn):
+        return self.conn.modify(group_dn, {'member': [(ldap3.MODIFY_DELETE, [member_dn])]})
+
+    def add_group_member(self, group_dn, member_dn):
+        return self.conn.modify(group_dn, {'member': [(ldap3.MODIFY_ADD, [member_dn])]})
+
+    def remove_groups(self, user_dn, groups):
+        for group in groups:
+            self.remove_group_member(group, user_dn)
