@@ -35,6 +35,7 @@ wait_limit = 15
 while waited < wait_limit:
     try:
         print(process.ldapwhoami().stdout.decode("utf-8"))
+        break
     except RuntimeError as e:
         sleep(1)
         waited += 1
