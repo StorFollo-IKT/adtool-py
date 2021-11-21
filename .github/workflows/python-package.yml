@@ -51,8 +51,14 @@ jobs:
       - name: Start docker container
         run: docker run -d -p 389:389 ad_emulator
 
-      - name: Install test utils
-        run: pip install slapd
+      - uses: actions/cache@v2
+        name: Cache python environment
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Install requirements
+        run: python -m pip install -r requirements.txt
 
       - name: Load test data
         run: python tests/load_data.py
