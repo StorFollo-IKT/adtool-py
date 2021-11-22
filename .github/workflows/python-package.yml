@@ -43,10 +43,7 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Install LDAP utils
-        run: sudo apt-get install -y ldap-utils slapd
-
-      - name: Stop local slapd
-        run: sudo /etc/init.d/slapd stop
+        run: sudo apt-get install -y ldap-utils
 
       - name: Start docker container
         run: docker run -d -p 389:389 ad_emulator
@@ -59,9 +56,6 @@ jobs:
 
       - name: Install requirements
         run: python -m pip install -r requirements.txt
-
-      - name: Load test data
-        run: python tests/load_data.py
 
       - name: Run tests
         run: coverage run -m unittest

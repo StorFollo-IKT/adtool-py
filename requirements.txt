@@ -1,3 +1,2 @@
 ldap3
-slapd
 coverage
