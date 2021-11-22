@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 
 import ldap3
 
@@ -70,7 +71,7 @@ class ADTools:
 
         return elements
 
-    def get_user(self, dn, attributes=None):
+    def get_user(self, dn, attributes=None) -> Optional[objects.User]:
         if attributes is None:
             attributes = []
         if 'memberOf' not in attributes:
@@ -86,7 +87,7 @@ class ADTools:
 
         return response[0]
 
-    def get_group(self, dn, attributes=None):
+    def get_group(self, dn, attributes=None) -> Optional[objects.Group]:
         if attributes is None:
             attributes = ['member']
         return self.get_object(dn, 'group', attributes)
