@@ -48,7 +48,7 @@ class SearchTest(TestCase):
         self.assertFalse(group.has_member(user))
         group.add_member(user)
         self.assertTrue(group.has_member(user))
-        self.assertTrue(user.has_group(group.dn))
+        self.assertTrue(user.has_group(group))
 
     def test_delete_member(self):
         user = self.adtools.get_user('CN=user2,OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com')
@@ -60,4 +60,27 @@ class SearchTest(TestCase):
         self.assertTrue(group.has_member(user))
         group.remove_member(user)
         self.assertFalse(group.has_member(user))
-        self.assertFalse(user.has_group(group.dn))
+        self.assertFalse(user.has_group(group))
+
+    def test_add_group(self):
+        user = self.adtools.get_user('CN=user3,OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com')
+        group = self.adtools.get_group(
+            'cn=group,ou=Users,ou=adtools-test,ou=Test,dc=example,dc=com')
+        self.assertIsInstance(user, objects.User)
+        self.assertIsInstance(group, objects.Group)
+        self.assertFalse(group.has_member(user))
+        user.add_group(group)
+        self.assertTrue(group.has_member(user))
+        self.assertTrue(user.has_group(group))
+
+    def test_remove_group(self):
+        user = self.adtools.get_user('CN=user2,OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com')
+        group = self.adtools.get_group(
+            'cn=group,ou=Users,ou=adtools-test,ou=Test,dc=example,dc=com')
+        self.assertIsInstance(user, objects.User)
+        self.assertIsInstance(group, objects.Group)
+
+        self.assertTrue(group.has_member(user))
+        user.remove_group(group)
+        self.assertFalse(group.has_member(user))
+        self.assertFalse(user.has_group(group))
