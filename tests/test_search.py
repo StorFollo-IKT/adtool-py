@@ -1,12 +1,28 @@
+import os
 from unittest import TestCase
 
-from adtools import ADTools, objects
+from adtools import ADTools, LdapCommands, objects
+
+
+def ldap_add(file):
+    file = os.path.join(os.path.dirname(__file__), file)
+    return LdapCommands.ldap_add(file, 'localhost', 'cn=admin,dc=example,dc=com', 'test',
+                                 continuous=True)
+
+
+def ldap_delete(dn, recursive=False):
+    return LdapCommands.ldap_delete(dn, 'localhost', 'cn=admin,dc=example,dc=com', 'test',
+                                    recursive=recursive)
 
 
 class SearchTest(TestCase):
     def setUp(self) -> None:
         self.adtools = ADTools()
         self.adtools.connect('localhost', 'cn=admin,dc=example,dc=com', 'test')
+        ldap_delete('OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com', recursive=True)
+        ldap_add('test_data/ou_structure.ldif')
+        ldap_add('test_data/users.ldif')
+        ldap_add('test_data/groups.ldif')
 
     def test_get_user(self):
         user = self.adtools.get_user('CN=user2,OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com')
