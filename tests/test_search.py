@@ -12,7 +12,7 @@ def ldap_add(file):
 
 def ldap_delete(dn, recursive=False):
     return LdapCommands.ldap_delete(dn, 'localhost', 'cn=admin,dc=example,dc=com', 'test',
-                                    recursive=recursive)
+                                    recursive=recursive, continuous=True)
 
 
 class SearchTest(TestCase):

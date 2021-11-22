@@ -25,5 +25,7 @@ def ldap_delete(dn, host, bind_dn, bind_password, port=None, continuous=False, r
         args.append('-r')
 
     process = subprocess.run(args, capture_output=True)
+    if continuous and process.returncode == 32:
+        return process
     process.check_returncode()
     return process
