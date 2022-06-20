@@ -2,6 +2,7 @@ import re
 from typing import Optional
 
 import ldap3
+from ldap3.core import exceptions as ldap_exceptions
 
 from . import exceptions, objects, utils
 
@@ -102,7 +103,10 @@ class ADTools:
         return self.conn.modify(group_dn, {'member': [(ldap3.MODIFY_DELETE, [member_dn])]})
 
     def add_group_member(self, group_dn, member_dn):
-        return self.conn.modify(group_dn, {'member': [(ldap3.MODIFY_ADD, [member_dn])]})
+        try:
+            return self.conn.modify(group_dn, {'member': [(ldap3.MODIFY_ADD, [member_dn])]})
+        except ldap_exceptions.LDAPEntryAlreadyExistsResult:
+            pass
 
     def remove_groups(self, user_dn, groups):
         for group in groups:
