@@ -1,5 +1,8 @@
 import os
+import time
 from unittest import TestCase
+
+from ldap3.core.exceptions import LDAPCommunicationError
 
 from adtools import ADTools, LdapCommands, objects
 
@@ -18,7 +21,18 @@ def ldap_delete(dn, recursive=False):
 class SearchTest(TestCase):
     def setUp(self) -> None:
         self.adtools = ADTools()
-        self.adtools.connect('localhost', 'cn=admin,dc=example,dc=com', 'test')
+        waited = 0
+        wait_limit = 15
+
+        while waited < wait_limit:
+            try:
+                self.adtools.connect('localhost', 'cn=admin,dc=example,dc=com', 'test')
+                break
+            except LDAPCommunicationError as e:
+                time.sleep(1)
+                waited += 1
+                print('Waited %d/%d second(s) for LDAP to become available' % (waited, wait_limit))
+
         ldap_delete('OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com', recursive=True)
         ldap_add('test_data/ou_structure.ldif')
         ldap_add('test_data/users.ldif')
