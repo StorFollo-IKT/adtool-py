@@ -85,7 +85,7 @@ class ADTools:
             attributes = []
         attributes.append('objectClass')
         if pagination:
-            return self.paginated_search(search_base, query, attributes, search_scope)
+            return self._paginated_search(search_base, query, attributes, search_scope)
 
         self.conn.search(search_base, query,
                          attributes=attributes,
