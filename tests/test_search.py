@@ -1,4 +1,5 @@
 import os
+from re import T
 import time
 from unittest import TestCase
 
@@ -98,3 +99,13 @@ class SearchTest(TestCase):
         user.remove_group(group)
         self.assertFalse(group.has_member(user))
         self.assertFalse(user.has_group(group))
+
+    def test_search(self):
+        users = self.adtools.search('OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com', '(objectClass=user)')
+        self.assertEqual(len(users), 3)
+        self.assertIsInstance(users[0], objects.User)
+
+    def test_search_pagination(self):
+        users = self.adtools.search('OU=Users,OU=adtools-test,OU=Test,DC=example,DC=com', '(objectClass=user)', pagination=True)
+        self.assertEqual(len(users), 3)
+        self.assertIsInstance(users[0], objects.User)
