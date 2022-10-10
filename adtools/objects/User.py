@@ -9,7 +9,8 @@ class User(ADObject):
 
     def __init__(self, adtools, response):
         super().__init__(adtools, response)
-        self.groups = list(map(utils.uppercase_dn, self['memberOf']))
+        if 'memberOf' in self.element['attributes'].keys():
+            self.groups = list(map(utils.uppercase_dn, self['memberOf']))
 
     def has_group(self, group: Group):
         return group.dn in self.groups
