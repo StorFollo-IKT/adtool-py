@@ -39,7 +39,7 @@ class ADTools:
         server = ldap3.Server(dc, port=port, use_ssl=ldaps)
         self.conn = ldap3.Connection(
             server, username, password,
-            client_strategy=ldap3.SAFE_SYNC, auto_bind=True, raise_exceptions=True)
+            auto_bind=True, raise_exceptions=True)
 
     def get_object(self, dn: str, object_type: str, attributes=None):
         if attributes is None:
@@ -55,14 +55,42 @@ class ADTools:
 
         return response[0]
 
-    def search(self, search_base, query, attributes=None, search_scope='SUBTREE'):
+    def _paginated_search(self, search_base, query, attributes=None, search_scope='SUBTREE'):
+        elements = []
+        self.conn.search(
+                search_base=search_base,
+                search_filter=query,
+                search_scope=search_scope,
+                attributes=attributes,
+                paged_size=5)
+
+        for element in self.conn.response:
+            elements.append(self._find_object_class(element))
+        cookie = self.conn.result['controls']['1.2.840.113556.1.4.319']['value']['cookie']
+        while cookie:
+            self.conn.search(
+                    search_base=search_base,
+                    search_filter=query,
+                    search_scope=search_scope,
+                    attributes=attributes,
+                    paged_size=5,
+                    paged_cookie=cookie)
+            cookie = self.conn.result['controls']['1.2.840.113556.1.4.319']['value']['cookie']
+            for element in self.conn.response:
+                elements.append(self._find_object_class(element))
+        return elements
+
+    def search(self, search_base, query, attributes=None, search_scope='SUBTREE', pagination=False):
         if attributes is None:
             attributes = []
         attributes.append('objectClass')
-        status, result, response, _ = self.conn.search(search_base, query,
-                                                       attributes=attributes,
-                                                       search_scope=search_scope)
-        check_result(result)
+        if pagination:
+            return self.paginated_search(search_base, query, attributes, search_scope)
+
+        self.conn.search(search_base, query,
+                         attributes=attributes,
+                         search_scope=search_scope)
+        response = self.conn.response
         if not response:
             return None
 
